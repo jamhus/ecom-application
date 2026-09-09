@@ -1,26 +1,37 @@
 package com.app.ecomapplication;
 
 import Entities.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/users")
 public class UserController {
-    final List<User> users = new ArrayList<>();
+    private final UserService userService;
 
-    @GetMapping("/api/users")
+    @GetMapping("/{id}")
+    public ResponseEntity<User> GetUserByID(@PathVariable Long id) {
+        return userService
+                .findUserById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @GetMapping
     public List<User> GetAllUsers() {
-        return users;
+        return userService.fetchAllUsers();
     }
 
-    @PostMapping("/api/users")
-    public List<User> CreateUser(@RequestBody User user) {
-        users.add(user);
-        return users;
+    @PostMapping
+    public void CreateUser(@RequestBody User user) {
+        userService.createUser(user);
+    }
+
+    @PutMapping("/{id}")
+    public boolean updateUser(@PathVariable Long id, @RequestBody User model) {
+        return userService.updateUser(id, model);
     }
 }
