@@ -1,6 +1,7 @@
-package com.app.ecomapplication;
+package com.app.ecomapplication.controller;
 
-import Entities.User;
+import com.app.ecomapplication.service.UserService;
+import com.app.ecomapplication.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
